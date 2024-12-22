@@ -38,10 +38,10 @@ def predict_diabetes(tuoi, gioi_tinh, bmi, duong_huyet, hba1c, insulin):
 if __name__ == '__main__':
     # Ví dụ sử dụng
     xac_suat = predict_diabetes(
-        tuoi=45,
+        tuoi=19,
         gioi_tinh='Nam',
         bmi=127.5,
-        duong_huyet=230,
+        duong_huyet=200,
         hba1c=6.5,
         insulin=10.2
     )

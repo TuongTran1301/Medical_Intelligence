@@ -3,7 +3,7 @@ import numpy as np
 np.random.seed(42)
 
 # Tạo 1000 mẫu dữ liệu
-n_samples = 1000
+n_samples = 10000
 
 # Tạo dữ liệu cho từng cột
 data = {

@@ -14,11 +14,16 @@ medialIntelligence
 
   # Cài đặt thư viện
   pip install -r requirements.txt
+
+  #random data
+  python generate_sample_data.py
+  
   ```
+  
 
 1. Huấn luyện mô hình:
    ```bash
-   python src/models/train_model.py
+   python src/train_model.py
    ```
 
 2. Dự đoán:
