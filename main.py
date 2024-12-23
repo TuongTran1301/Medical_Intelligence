@@ -1,5 +1,8 @@
 import pickle
 import pandas as pd
+from flask import Flask, request, jsonify
+
+app = Flask(__name__)
 
 def load_model_and_scaler():
     """Tải mô hình và bộ chia tỷ lệ đã được huấn luyện"""
@@ -174,23 +177,22 @@ def generate_advice(input_data, probability):
 
 
 
+@app.route('/predict', methods=['POST'])
+def predict():
+    """Endpoint dự đoán và trả lời lời khuyên."""
+    try:
+        input_data = request.json  # Lấy dữ liệu từ request body
+        if not input_data:
+            return jsonify({"error": "No input data provided"}), 400
+        
+        probability, advice = predict_health(input_data)
+        
+        return jsonify({
+            "probability": probability,
+            "advice": advice
+        }), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
 if __name__ == '__main__':
-    # Ví dụ sử dụng
-    input_data = {
-        'SGOT': 10,
-        'SGPT': 55,
-        'HDL-C': 35,
-        'LDL-C': 30,
-        'GGT': 25,
-        'Cre': 1.1,
-        'Uric': 5.5,
-        'HCT': 42,
-        'MCV': 10,
-        'LYM': 35,
-        'Bạch cầu Mono': 6 
-    }
-    
-    xac_suat, tu_van = predict_health(input_data)
-    print(f"Xác suất mắc bệnh: {xac_suat:.2%}")
-    print("Tư vấn cho bạn:")
-    print(tu_van)
+    app.run(debug=True)

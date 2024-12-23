@@ -6,7 +6,7 @@ from evaluation import evaluate_model
 
 class ModelTrainer:
     def __init__(self):
-        self.model = RandomForestClassifier(n_estimators=100, random_state=42)
+        self.model = RandomForestClassifier(n_estimators=1000, random_state=42)
 
     def train(self, X_train, y_train):
         self.model.fit(X_train, y_train)

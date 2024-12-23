@@ -34,8 +34,8 @@ adjustments = {
     'Glu': (70, 180),
     'SGOT': (10, 40),
     'SGPT': (10, 50),
-    'HDL-C': (20, 70),
-    'LDL-C': (70, 190),
+    'HDL_C': (20, 70),
+    'LDL_C': (70, 190),
     'GGT': (5, 80),
     'Cre': (0.5, 1.5),
     'Uric': (3.0, 8.0),
@@ -52,8 +52,8 @@ for col, (min_val, max_val) in adjustments.items():
 conditions = (
     (df['BMI'] > 30) | 
     (df['Glu'] > 126) | 
-    (df['LDL-C'] > 160) | 
-    (df['HDL-C'] < 40) | 
+    (df['LDL_C'] > 160) | 
+    (df['HDL_C'] < 40) | 
     (df['Uric'] > 7.0) | 
     (df['SGOT'] > 35) | 
     (df['SGPT'] > 40) | 
@@ -73,11 +73,11 @@ for _, row in df.iterrows():
         advice.append("Kiểm tra đường huyết thường xuyên và hạn chế đồ ngọt.")
         advice.append("Tham khảo bác sĩ nội tiết để điều chỉnh chế độ ăn và thuốc.")
         advice.append("Duy trì chế độ ăn ít tinh bột và đường.")
-    if row['LDL-C'] > 160:
+    if row['LDL_C'] > 160:
         advice.append("Tránh thực phẩm giàu cholesterol.")
         advice.append("Tăng cường ăn rau xanh và các loại hạt tốt cho tim mạch.")
         advice.append("Tham khảo bác sĩ để xem xét dùng thuốc giảm mỡ máu nếu cần.")
-    if row['HDL-C'] < 40:
+    if row['HDL_C'] < 40:
         advice.append("Tăng cường vận động thể chất.")
         advice.append("Ăn các thực phẩm giàu omega-3 như cá hồi, cá thu.")
     if row['Uric'] > 7.0:
