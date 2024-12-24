@@ -10,14 +10,12 @@ class DataProcessor:
         self.scaler = StandardScaler()
 
     def load_data(self):
-        """Load dataset from file with UTF-8 or fallback to Latin-1 encoding."""
         try:
             return pd.read_csv(self.raw_data_path, encoding='utf-8')
         except UnicodeDecodeError:
             return pd.read_csv(self.raw_data_path, encoding='latin1')
 
     def preprocess_data(self, df, target_col='target'):
-        """Preprocess dataset: handle missing columns, encode gender, and fill missing values."""
         required_columns = self.feature_columns + [target_col]
         missing_columns = [col for col in required_columns if col not in df.columns]
 
@@ -31,34 +29,35 @@ class DataProcessor:
                 else:
                     raise ValueError(f"Cannot process missing column: {col}")
 
-        # Encode Gender column
+        # Chuẩn hóa và mã hóa cột Gender
         if 'Gender' in df.columns:
             df['Gender'] = df['Gender'].fillna('Unknown').str.strip().str.capitalize()
             df['Gender'] = df['Gender'].map({'Male': 1, 'Female': 0, 'Unknown': -1})
 
-        # Fill missing values in numeric columns
+        # Xử lý dữ liệu thiếu: thay thế giá trị thiếu trong các cột số bằng giá trị trung bình
         numeric_cols = df.select_dtypes(include=['float64', 'int64']).columns
-        df[numeric_cols] = df[numeric_cols].fillna(df[numeric_cols].mean())
+        df[numeric_cols] = df[numeric_cols].fillna(df[numeric_cols].median())
 
-        # Drop rows with any remaining missing values
+        # Xóa các hàng còn thiếu dữ liệu (nếu vẫn còn)
         df.dropna(inplace=True)
 
-        # Map target column if necessary
-        if target_col == 'Result':
-            df[target_col] = df[target_col].map({2: 0, 1: 1})  # 0: Bình thường, 1: Bị bệnh
+        # Kiểm tra lại dữ liệu sau xử lý
+        if df.isnull().values.any():
+            print("Dữ liệu vẫn còn giá trị thiếu sau khi xử lý:")
+            print(df.isnull().sum())
+            raise ValueError("Dữ liệu vẫn còn giá trị thiếu sau khi xử lý.")
 
         X = df[self.feature_columns]
         y = df[target_col]
         return X, y
 
+
     def split_and_scale_data(self, X, y):
-        """Split and scale dataset for training and testing."""
         X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
         X_train_scaled = self.scaler.fit_transform(X_train)
         X_test_scaled = self.scaler.transform(X_test)
         return X_train_scaled, X_test_scaled, y_train, y_test
 
     def save_scaler(self, output_path):
-        """Save the scaler to a file."""
         with open(output_path, 'wb') as f:
             pickle.dump(self.scaler, f)

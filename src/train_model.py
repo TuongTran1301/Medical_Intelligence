@@ -1,6 +1,8 @@
 from sklearn.ensemble import RandomForestClassifier
 import pickle
 import os
+
+from sklearn.model_selection import cross_val_score
 from data_processing import DataProcessor
 from evaluation import evaluate_model
 
@@ -9,6 +11,9 @@ class ModelTrainer:
         self.model = RandomForestClassifier(n_estimators=1000, random_state=42)
 
     def train(self, X_train, y_train):
+        # Thêm Cross-Validation
+        scores = cross_val_score(self.model, X_train, y_train, cv=5, scoring='accuracy')
+        print(f"Cross-Validation Accuracy: {scores.mean():.4f} ± {scores.std():.4f}")
         self.model.fit(X_train, y_train)
 
     def save_model(self, output_path):
